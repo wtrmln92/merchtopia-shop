@@ -5,7 +5,14 @@ update stock, and for end users to buy product.
 
 ## Description
 
-This is the public facing shop for users to browse and buy products
+This is the public facing shop for users to browse and buy products.
+The stack consists of:
+
+- vite
+- typescript
+- react
+- tanstack query and router
+- mantine
 
 ## Prerequisites
 
