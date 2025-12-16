@@ -29,15 +29,17 @@ function HomePage() {
           ? Array.from({ length: 8 }).map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))
-          : products?.map((product) => (
-              <ProductCard
-                key={product.uuid}
-                uuid={product.uuid}
-                displayName={product.displayName}
-                price={product.price}
-                stockAmount={product.stockAmount}
-              />
-            ))}
+          : [...(products ?? [])]
+              .sort((a, b) => (b.stockAmount > 0 ? 1 : 0) - (a.stockAmount > 0 ? 1 : 0))
+              .map((product) => (
+                <ProductCard
+                  key={product.uuid}
+                  uuid={product.uuid}
+                  displayName={product.displayName}
+                  price={product.price}
+                  stockAmount={product.stockAmount}
+                />
+              ))}
       </SimpleGrid>
     </Container>
   );

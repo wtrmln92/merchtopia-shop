@@ -1,4 +1,5 @@
 import { Card, Skeleton, Image, Text, Button } from "@mantine/core";
+import { Link } from "@tanstack/react-router";
 import { IconShoppingCartPlus } from "@tabler/icons-react";
 
 interface ProductCardProps {
@@ -18,37 +19,44 @@ export function ProductCard({
   const inStock = stockAmount > 0;
 
   return (
-    <Card
-      shadow="sm"
-      padding="lg"
-      radius="md"
-      withBorder
-      style={!inStock ? { opacity: 0.6 } : undefined}
+    <Link
+      to="/products/$productId"
+      params={{ productId: uuid }}
+      style={{ textDecoration: "none", color: "inherit" }}
     >
-      <Card.Section>
-        <Image src={imageUrl} height={160} alt={displayName} />
-      </Card.Section>
+      <Card
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+        style={{ opacity: !inStock ? 0.6 : undefined }}
+      >
+        <Card.Section>
+          <Image src={imageUrl} height={160} alt={displayName} />
+        </Card.Section>
 
-      <Text fw={500} lineClamp={1} mt="md" mb="xs">{displayName}</Text>
+        <Text fw={500} lineClamp={1} mt="md" mb="xs">{displayName}</Text>
 
-      <Text size="xl" fw={700} c="blue">
-        ${price}
-      </Text>
+        <Text size="xl" fw={700} c="blue">
+          ${price}
+        </Text>
 
-      {inStock ? (
-        <Button
-          fullWidth
-          mt="md"
-          leftSection={<IconShoppingCartPlus size={18} />}
-        >
-          Add to cart
-        </Button>
-      ) : (
-        <Button fullWidth mt="md" variant="light" color="gray" disabled>
-          Out of stock
-        </Button>
-      )}
-    </Card>
+        {inStock ? (
+          <Button
+            fullWidth
+            mt="md"
+            leftSection={<IconShoppingCartPlus size={18} />}
+            onClick={(e) => e.preventDefault()}
+          >
+            Add to cart
+          </Button>
+        ) : (
+          <Button fullWidth mt="md" variant="light" color="gray" disabled>
+            Out of stock
+          </Button>
+        )}
+      </Card>
+    </Link>
   );
 }
 
