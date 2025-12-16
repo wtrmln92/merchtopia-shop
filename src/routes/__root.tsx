@@ -1,6 +1,7 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, AppShell } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
+import { Header } from "../components/Header";
 import "@mantine/core/styles.css";
 
 export const Route = createRootRoute({
@@ -11,7 +12,14 @@ function RootLayout() {
   return (
     <MantineProvider>
       <ModalsProvider>
-        <Outlet />
+        <AppShell header={{ height: 60 }} padding="md">
+          <AppShell.Header>
+            <Header />
+          </AppShell.Header>
+          <AppShell.Main>
+            <Outlet />
+          </AppShell.Main>
+        </AppShell>
       </ModalsProvider>
     </MantineProvider>
   );
