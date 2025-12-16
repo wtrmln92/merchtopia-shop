@@ -1,22 +1,30 @@
 import { Card, Skeleton, Image, Text, Button } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
-import { IconShoppingCartPlus } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
+import { IconShoppingCartPlus, IconCheck } from "@tabler/icons-react";
+import { useCart } from "../context/CartContext";
+import type { Product } from "../types/api";
 
 interface ProductCardProps {
-  uuid: string;
-  displayName: string;
-  price: string;
-  stockAmount: number;
+  product: Product;
 }
 
-export function ProductCard({
-  uuid,
-  displayName,
-  price,
-  stockAmount,
-}: ProductCardProps) {
+export function ProductCard({ product }: ProductCardProps) {
+  const { addToCart } = useCart();
+  const { uuid, displayName, price, stockAmount } = product;
   const imageUrl = `https://picsum.photos/seed/${uuid}/400/300`;
   const inStock = stockAmount > 0;
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    addToCart(product);
+    notifications.show({
+      title: "Added to cart",
+      message: `${displayName} has been added to your cart`,
+      icon: <IconCheck size={16} />,
+      color: "green",
+    });
+  };
 
   return (
     <Link
@@ -46,7 +54,7 @@ export function ProductCard({
             fullWidth
             mt="md"
             leftSection={<IconShoppingCartPlus size={18} />}
-            onClick={(e) => e.preventDefault()}
+            onClick={handleAddToCart}
           >
             Add to cart
           </Button>

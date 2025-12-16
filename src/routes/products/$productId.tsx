@@ -17,8 +17,11 @@ import {
   IconShoppingCartPlus,
   IconAlertCircle,
   IconArrowLeft,
+  IconCheck,
 } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
 import { useGetShopProduct } from "../../hooks/queries/useGetShopProduct";
+import { useCart } from "../../context/CartContext";
 
 export const Route = createFileRoute("/products/$productId")({
   component: ProductDetailPage,
@@ -27,6 +30,7 @@ export const Route = createFileRoute("/products/$productId")({
 function ProductDetailPage() {
   const { productId } = Route.useParams();
   const { data: product, isLoading, error } = useGetShopProduct(productId);
+  const { addToCart } = useCart();
 
   if (isLoading) {
     return <ProductDetailSkeleton />;
@@ -75,10 +79,9 @@ function ProductDetailPage() {
 
         <Stack style={{ flex: 1, minWidth: 280 }}>
           <div>
-            <Group gap="sm" mb="xs">
-              {product.isOnSale && <Badge color="red">On Sale</Badge>}
-              {!inStock && <Badge color="gray">Out of Stock</Badge>}
-            </Group>
+            {!inStock && (
+              <Badge color="gray" mb="xs">Out of Stock</Badge>
+            )}
             <Title order={1}>{product.displayName}</Title>
           </div>
 
@@ -87,7 +90,7 @@ function ProductDetailPage() {
           </Text>
 
           {product.description && (
-            <Text c="dimmed">{product.description}</Text>
+            <Text>{product.description}</Text>
           )}
 
           <Text size="sm" c="dimmed">
@@ -109,6 +112,15 @@ function ProductDetailPage() {
               size="lg"
               leftSection={<IconShoppingCartPlus size={20} />}
               mt="md"
+              onClick={() => {
+                addToCart(product);
+                notifications.show({
+                  title: "Added to cart",
+                  message: `${product.displayName} has been added to your cart`,
+                  icon: <IconCheck size={16} />,
+                  color: "green",
+                });
+              }}
             >
               Add to Cart
             </Button>
