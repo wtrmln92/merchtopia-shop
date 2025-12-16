@@ -115,7 +115,7 @@ function CartPage() {
         >
           Continue Shopping
         </Button>
-        <Button size="lg">Checkout</Button>
+        <Button component={Link} to="/checkout" size="lg">Checkout</Button>
       </Group>
     </Container>
   );

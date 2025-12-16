@@ -180,6 +180,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/order": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OrderController_findAll"];
+        put?: never;
+        post: operations["OrderController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/order/lookup/{uuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OrderController_lookup"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/order/{uuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OrderController_findOne"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/order/{uuid}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["OrderController_updateStatus"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -202,12 +266,12 @@ export interface components {
             isOnSale: boolean;
             /**
              * Format: date-time
-             * @default 2025-12-16T08:37:46.305Z
+             * @default 2025-12-16T10:27:10.218Z
              */
             createdAt: string;
             /**
              * Format: date-time
-             * @default 2025-12-16T08:37:46.305Z
+             * @default 2025-12-16T10:27:10.218Z
              */
             updatedAt: string;
             /** Format: date-time */
@@ -238,7 +302,7 @@ export interface components {
             notes?: string;
             /**
              * Format: date-time
-             * @default 2025-12-16T08:37:46.309Z
+             * @default 2025-12-16T10:27:10.221Z
              */
             createdAt: string;
         };
@@ -247,6 +311,21 @@ export interface components {
             productUuid: string;
             quantity: number;
             notes?: string;
+        };
+        CreateOrderItemDto: {
+            /** Format: uuid */
+            productUuid: string;
+            quantity: number;
+        };
+        CreateOrderDto: {
+            customerName?: string;
+            /** Format: email */
+            customerEmail: string;
+            items: components["schemas"]["CreateOrderItemDto"][];
+        };
+        UpdateOrderStatusDto: {
+            /** @enum {string} */
+            status: "PENDING" | "CONFIRMED" | "CANCELLED" | "FULFILLED";
         };
     };
     responses: never;
@@ -261,6 +340,9 @@ export type UpdateProductDto = components['schemas']['UpdateProductDto'];
 export type AddStockDto = components['schemas']['AddStockDto'];
 export type StockTransaction = components['schemas']['StockTransaction'];
 export type AdjustStockDto = components['schemas']['AdjustStockDto'];
+export type CreateOrderItemDto = components['schemas']['CreateOrderItemDto'];
+export type CreateOrderDto = components['schemas']['CreateOrderDto'];
+export type UpdateOrderStatusDto = components['schemas']['UpdateOrderStatusDto'];
 export type $defs = Record<string, never>;
 export interface operations {
     ProductController_findAll: {
@@ -540,6 +622,117 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    OrderController_findAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>[];
+                };
+            };
+        };
+    };
+    OrderController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateOrderDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    OrderController_lookup: {
+        parameters: {
+            query: {
+                email: string;
+            };
+            header?: never;
+            path: {
+                uuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    OrderController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                uuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    OrderController_updateStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                uuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateOrderStatusDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {

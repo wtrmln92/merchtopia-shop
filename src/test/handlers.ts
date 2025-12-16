@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import type { Product } from "../types/api";
+import type { Product, CreateOrderDto } from "../types/api";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -24,6 +24,16 @@ export const mockProducts: Product[] = [
     createdAt: "2025-01-01T00:00:00.000Z",
     updatedAt: "2025-01-01T00:00:00.000Z",
   },
+  {
+    uuid: "product-3",
+    sku: "SKU-003",
+    displayName: "Limited Stock Product",
+    price: "15.00",
+    stockAmount: 2,
+    isOnSale: false,
+    createdAt: "2025-01-01T00:00:00.000Z",
+    updatedAt: "2025-01-01T00:00:00.000Z",
+  },
 ];
 
 export const handlers = [
@@ -37,5 +47,26 @@ export const handlers = [
       return HttpResponse.json(product);
     }
     return new HttpResponse(null, { status: 404 });
+  }),
+
+  http.post(`${BASE_URL}/order`, async ({ request }) => {
+    const body = (await request.json()) as CreateOrderDto;
+
+    // Validate required fields
+    if (!body.customerEmail || !body.items || body.items.length === 0) {
+      return HttpResponse.json(
+        { message: "Invalid order data" },
+        { status: 400 }
+      );
+    }
+
+    // Return success response
+    return HttpResponse.json({
+      uuid: "order-123",
+      status: "PENDING",
+      customerEmail: body.customerEmail,
+      customerName: body.customerName,
+      items: body.items,
+    }, { status: 201 });
   }),
 ];

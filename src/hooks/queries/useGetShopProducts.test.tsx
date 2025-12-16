@@ -29,7 +29,7 @@ describe("useGetShopProducts", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(result.current.data).toHaveLength(2);
+    expect(result.current.data).toHaveLength(3);
     expect(result.current.data?.[0]).toMatchObject({
       uuid: "product-1",
       displayName: "Test Product One",
